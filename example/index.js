@@ -70,7 +70,7 @@ var css = exports;
 forEach(properties, function(key) {
     if (indexOf(nonPrefixProperties, key) === -1) {
         css[key] = function(styles, value) {
-            return prefix(styles, key, value);
+            return prefix(styles, key, value, null, css.stopPrefix);
         };
     } else {
         css[key] = function(styles, value) {
@@ -86,6 +86,7 @@ css.transition = function(styles) {
     return transition(styles, fastSlice(arguments, 1));
 };
 
+css.stopPrefix = false;
 css.prefixes = require(20);
 css.properties = properties;
 
@@ -516,16 +517,18 @@ var prefixes = require(20),
 module.exports = prefix;
 
 
-function prefix(styles, key, value, prefixValue) {
-    var i = -1,
-        il = prefixes.length - 1,
-        pre;
+function prefix(styles, key, value, prefixValue, stopPrefix) {
+    var i, il, pre;
 
-    prefixValue = prefixValue === true;
+    if (stopPrefix !== true) {
+        prefixValue = prefixValue === true;
+        i = -1;
+        il = prefixes.length - 1;
 
-    while (i++ < il) {
-        pre = prefixes[i];
-        styles[pre.js + capitalizeString(key)] = prefixValue ? pre.css + value : value;
+        while (i++ < il) {
+            pre = prefixes[i];
+            styles[pre.js + capitalizeString(key)] = prefixValue ? pre.css + value : value;
+        }
     }
 
     styles[key] = value;
@@ -904,14 +907,20 @@ var prefixes = require(20),
 module.exports = transition;
 
 
-function transition(styles, transitions) {
-    var i = -1,
-        il = prefixes.length - 1,
-        prefix;
+var css = require(1);
 
-    while (i++ < il) {
-        prefix = prefixes[i];
-        styles[prefix.js + "Transition"] = prefixArray(prefix.css, transitions).join(", ");
+
+function transition(styles, transitions) {
+    var i, il, prefix;
+
+    if (css.stopPrefix !== true) {
+        i = -1;
+        il = prefixes.length - 1;
+
+        while (i++ < il) {
+            prefix = prefixes[i];
+            styles[prefix.js + "Transition"] = prefixArray(prefix.css, transitions).join(", ");
+        }
     }
 
     styles.transition = transitions.join(", ");
@@ -1154,10 +1163,13 @@ var prefix = require(19);
 module.exports = opacity;
 
 
+var css = require(1);
+
+
 function opacity(styles, value) {
     styles["-ms-filter"] = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + value + ")";
     styles.filter = "alpha(opacity=" + value + ")";
-    return prefix(styles, "opacity", value);
+    return prefix(styles, "opacity", value, null, css.stopPrefix);
 }
 
 
@@ -1165,10 +1177,12 @@ function opacity(styles, value) {
 function(require, exports, module, global) {
 
 var forEach = require(2),
-    isFunction = require(6),
+    indexOf = require(17),
     capitalizeString = require(24),
     transition = require(27),
-    css = require(1);
+    properties = require(26),
+    nonPrefixProperties = require(29),
+    prefix = require(19);
 
 
 var Array_slice = Array.prototype.slice,
@@ -1178,13 +1192,21 @@ var Array_slice = Array.prototype.slice,
 module.exports = Styles;
 
 
+var css = require(1);
+
+
 function Styles() {}
 StylesPrototype = Styles.prototype;
 
-forEach(css, function(fn, key) {
-    if (isFunction(fn)) {
+forEach(properties, function(key) {
+    if (indexOf(nonPrefixProperties, key) === -1) {
         StylesPrototype["set" + capitalizeString(key)] = function(value) {
-            return fn(this, value);
+            return prefix(this, key, value, null, css.stopPrefix);
+        };
+    } else {
+        StylesPrototype["set" + capitalizeString(key)] = function(value) {
+            this[key] = value;
+            return this;
         };
     }
 });

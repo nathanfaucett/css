@@ -27,7 +27,6 @@
     "environment": "git://github.com/nathanfaucett/environment.git",
     "fast_slice": "git://github.com/nathanfaucett/fast_slice.git",
     "for_each": "git://github.com/nathanfaucett/for_each.git",
-    "index_of": "git://github.com/nathanfaucett/index_of.git",
-    "is_function": "git://github.com/nathanfaucett/is_function.git"
+    "index_of": "git://github.com/nathanfaucett/index_of.git"
   }
 }

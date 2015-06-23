@@ -1,8 +1,10 @@
 var forEach = require("for_each"),
-    isFunction = require("is_function"),
+    indexOf = require("index_of"),
     capitalizeString = require("capitalize_string"),
     transition = require("./transition"),
-    css = require("./index");
+    properties = require("./properties"),
+    nonPrefixProperties = require("./nonPrefixProperties"),
+    prefix = require("./prefix");
 
 
 var Array_slice = Array.prototype.slice,
@@ -12,13 +14,21 @@ var Array_slice = Array.prototype.slice,
 module.exports = Styles;
 
 
+var css = require("./index");
+
+
 function Styles() {}
 StylesPrototype = Styles.prototype;
 
-forEach(css, function(fn, key) {
-    if (isFunction(fn)) {
+forEach(properties, function(key) {
+    if (indexOf(nonPrefixProperties, key) === -1) {
         StylesPrototype["set" + capitalizeString(key)] = function(value) {
-            return fn(this, value);
+            return prefix(this, key, value, null, css.stopPrefix);
+        };
+    } else {
+        StylesPrototype["set" + capitalizeString(key)] = function(value) {
+            this[key] = value;
+            return this;
         };
     }
 });

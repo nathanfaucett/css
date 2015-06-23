@@ -13,7 +13,7 @@ var css = exports;
 forEach(properties, function(key) {
     if (indexOf(nonPrefixProperties, key) === -1) {
         css[key] = function(styles, value) {
-            return prefix(styles, key, value);
+            return prefix(styles, key, value, null, css.stopPrefix);
         };
     } else {
         css[key] = function(styles, value) {
@@ -29,6 +29,7 @@ css.transition = function(styles) {
     return transition(styles, fastSlice(arguments, 1));
 };
 
+css.stopPrefix = false;
 css.prefixes = require("./prefixes");
 css.properties = properties;
 

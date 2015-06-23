@@ -5,16 +5,18 @@ var prefixes = require("./prefixes"),
 module.exports = prefix;
 
 
-function prefix(styles, key, value, prefixValue) {
-    var i = -1,
-        il = prefixes.length - 1,
-        pre;
+function prefix(styles, key, value, prefixValue, stopPrefix) {
+    var i, il, pre;
 
-    prefixValue = prefixValue === true;
+    if (stopPrefix !== true) {
+        prefixValue = prefixValue === true;
+        i = -1;
+        il = prefixes.length - 1;
 
-    while (i++ < il) {
-        pre = prefixes[i];
-        styles[pre.js + capitalizeString(key)] = prefixValue ? pre.css + value : value;
+        while (i++ < il) {
+            pre = prefixes[i];
+            styles[pre.js + capitalizeString(key)] = prefixValue ? pre.css + value : value;
+        }
     }
 
     styles[key] = value;
