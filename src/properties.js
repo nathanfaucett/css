@@ -219,6 +219,7 @@ module.exports = [
     "unicodeBidi",
     "unicodeRange",
     "userZoom",
+    "userSelect",
     "vectorEffect",
     "verticalAlign",
     "visibility",

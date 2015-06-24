@@ -2,6 +2,7 @@ var forEach = require("for_each"),
     indexOf = require("index_of"),
     capitalizeString = require("capitalize_string"),
     transition = require("./transition"),
+    textShadow = require("./textShadow"),
     properties = require("./properties"),
     nonPrefixProperties = require("./nonPrefixProperties"),
     prefix = require("./prefix");
@@ -35,4 +36,8 @@ forEach(properties, function(key) {
 
 StylesPrototype.setTransition = function() {
     return transition(this, Array_slice.call(arguments));
+};
+
+StylesPrototype.setTextShadow = function() {
+    return textShadow(this, Array_slice.call(arguments));
 };

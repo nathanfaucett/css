@@ -47,6 +47,7 @@ var styles = new css.Styles();
 
 styles.setAlignContent("left");
 styles.setTransition("background 200ms linear 0ms", "opacity 100ms linear 0ms");
+styles.setTextShadow("0 0 2px #000", "0 2px 2px #000");
 
 
 console.log(styles);
@@ -61,7 +62,8 @@ var forEach = require(2),
     prefix = require(19),
     properties = require(26),
     transition = require(27),
-    nonPrefixProperties = require(29);
+    textShadow = require(29),
+    nonPrefixProperties = require(30);
 
 
 var css = exports;
@@ -80,17 +82,20 @@ forEach(properties, function(key) {
     }
 });
 
-css.opacity = require(30);
+css.opacity = require(31);
 
 css.transition = function(styles) {
     return transition(styles, fastSlice(arguments, 1));
+};
+css.textShadow = function(styles) {
+    return textShadow(styles, fastSlice(arguments, 1));
 };
 
 css.stopPrefix = false;
 css.prefixes = require(20);
 css.properties = properties;
 
-css.Styles = require(31);
+css.Styles = require(32);
 
 
 },
@@ -879,6 +884,7 @@ module.exports = [
     "unicodeBidi",
     "unicodeRange",
     "userZoom",
+    "userSelect",
     "vectorEffect",
     "verticalAlign",
     "visibility",
@@ -946,6 +952,37 @@ function prefixArray(prefix, array) {
     }
 
     return out;
+}
+
+
+},
+function(require, exports, module, global) {
+
+var prefixes = require(20);
+
+
+module.exports = textShadow;
+
+
+var css = require(1);
+
+
+function textShadow(styles, textShadows) {
+    var i, il, prefix;
+
+    if (css.stopPrefix !== true) {
+        i = -1;
+        il = prefixes.length - 1;
+
+        while (i++ < il) {
+            prefix = prefixes[i];
+            styles[prefix.js + "TextShadow"] = textShadows.join(", ");
+        }
+    }
+
+    styles.textShadow = textShadows.join(", ");
+
+    return styles;
 }
 
 
@@ -1180,8 +1217,9 @@ var forEach = require(2),
     indexOf = require(17),
     capitalizeString = require(24),
     transition = require(27),
+    textShadow = require(29),
     properties = require(26),
-    nonPrefixProperties = require(29),
+    nonPrefixProperties = require(30),
     prefix = require(19);
 
 
@@ -1213,6 +1251,10 @@ forEach(properties, function(key) {
 
 StylesPrototype.setTransition = function() {
     return transition(this, Array_slice.call(arguments));
+};
+
+StylesPrototype.setTextShadow = function() {
+    return textShadow(this, Array_slice.call(arguments));
 };
 
 

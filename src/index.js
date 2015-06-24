@@ -4,6 +4,7 @@ var forEach = require("for_each"),
     prefix = require("./prefix"),
     properties = require("./properties"),
     transition = require("./transition"),
+    textShadow = require("./textShadow"),
     nonPrefixProperties = require("./nonPrefixProperties");
 
 
@@ -27,6 +28,9 @@ css.opacity = require("./opacity");
 
 css.transition = function(styles) {
     return transition(styles, fastSlice(arguments, 1));
+};
+css.textShadow = function(styles) {
+    return textShadow(styles, fastSlice(arguments, 1));
 };
 
 css.stopPrefix = false;
