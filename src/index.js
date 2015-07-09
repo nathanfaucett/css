@@ -37,4 +37,9 @@ css.stopPrefix = false;
 css.prefixes = require("./prefixes");
 css.properties = properties;
 
+css.colors = require("./colors");
 css.Styles = require("./Styles");
+
+css.darken = require("./manipulators/darken");
+css.fade = require("./manipulators/fade");
+css.lighten = require("./manipulators/lighten");
