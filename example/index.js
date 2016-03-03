@@ -518,7 +518,7 @@ function(require, exports, module, undefined, global) {
 /* ../../src/transition.js */
 
 var prefixes = require(11),
-    prefixArray = require(42);
+    prefixArray = require(48);
 
 
 module.exports = transition;
@@ -862,6 +862,7 @@ easing.inOutBack = "cubic-bezier(0.68, -0.55, 0.265, 1.55)";
 easing["in"] = "cubic-bezier(0.755, 0.05, 0.855, 0.06)";
 easing.out = "cubic-bezier(0.23, 1, 0.32, 1)";
 easing.inOut = "cubic-bezier(0.445, 0.05, 0.55, 0.95)";
+
 
 },
 function(require, exports, module, undefined, global) {
@@ -1210,8 +1211,8 @@ StylesPrototype.setTextShadow = function() {
 function(require, exports, module, undefined, global) {
 /* ../../src/manipulators/darken.js */
 
-var color = require(43),
-    toStyle = require(44);
+var color = require(49),
+    toStyle = require(50);
 
 
 var darken_color = color.create();
@@ -1236,8 +1237,8 @@ function darken(style, amount) {
 function(require, exports, module, undefined, global) {
 /* ../../src/manipulators/fade.js */
 
-var color = require(43),
-    toStyle = require(44);
+var color = require(49),
+    toStyle = require(50);
 
 
 var fade_color = color.create();
@@ -1258,8 +1259,8 @@ function fade(style, amount) {
 function(require, exports, module, undefined, global) {
 /* ../../src/manipulators/lighten.js */
 
-var color = require(43),
-    toStyle = require(44);
+var color = require(49),
+    toStyle = require(50);
 
 
 var lighten_color = color.create();
@@ -1795,13 +1796,13 @@ function(require, exports, module, undefined, global) {
 /* ../../src/prefixes/browser.js */
 
 var environment = require(38),
-    createPrefix = require(41);
+    getCurrentStyle = require(41),
+    Prefix = require(42);
 
 
-var win = environment.window,
-    doc = environment.document,
+var document = environment.document,
 
-    styles = win.getComputedStyle(doc.documentElement, ""),
+    styles = getCurrentStyle(document.documentElement || document.body.parentNode),
 
     pre = (
         Array.prototype.slice.call(styles).join("").match(/-(moz|webkit|ms)-/) ||
@@ -1810,8 +1811,7 @@ var win = environment.window,
 
     dom = ("WebKit|Moz|MS|O").match(new RegExp("(" + pre + ")", "i"))[1];
 
-
-module.exports = [createPrefix(dom, pre)];
+module.exports = [new Prefix(dom, pre)];
 
 
 },
@@ -1819,7 +1819,7 @@ function(require, exports, module, undefined, global) {
 /* ../../src/prefixes/node.js */
 
 var forEach = require(2),
-    createPrefix = require(41);
+    Prefix = require(42);
 
 
 var prefixes = module.exports = [];
@@ -1831,28 +1831,177 @@ forEach([
     ["MS", "ms"],
     ["O", "o"]
 ], function(value) {
-    prefixes[prefixes.length] = createPrefix(value[0], value[1]);
+    prefixes[prefixes.length] = new Prefix(value[0], value[1]);
 });
 
 
 },
 function(require, exports, module, undefined, global) {
-/* ../../src/prefixes/createPrefix.js */
+/* ../../node_modules/get_current_style/src/index.js */
+
+var supports = require(43),
+    environment = require(38),
+    isElement = require(44),
+    isString = require(29),
+    camelize = require(45);
+
+
+var baseGetCurrentStyles;
+
+
+module.exports = getCurrentStyle;
+
+
+function getCurrentStyle(node, style) {
+    if (isElement(node)) {
+        if (isString(style)) {
+            return baseGetCurrentStyles(node)[camelize(style)] || "";
+        } else {
+            return baseGetCurrentStyles(node);
+        }
+    } else {
+        if (isString(style)) {
+            return "";
+        } else {
+            return null;
+        }
+    }
+}
+
+if (supports.dom && environment.document.defaultView) {
+    baseGetCurrentStyles = function(node) {
+        return node.ownerDocument.defaultView.getComputedStyle(node, "");
+    };
+} else {
+    baseGetCurrentStyles = function(node) {
+        if (node.currentStyle) {
+            return node.currentStyle;
+        } else {
+            return node.style;
+        }
+    };
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../src/prefixes/Prefix.js */
 
 var capitalizeString = require(37);
 
 
-module.exports = createPrefix;
+module.exports = Prefix;
 
 
-function createPrefix(dom, pre) {
-    return {
-        dom: dom,
-        lowercase: pre,
-        css: "-" + pre + "-",
-        js: capitalizeString(pre)
+function Prefix(dom, pre) {
+    this.dom = dom;
+    this.lowercase = pre;
+    this.css = "-" + pre + "-";
+    this.js = capitalizeString(pre);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/supports/src/index.js */
+
+var environment = require(38);
+
+
+var supports = module.exports;
+
+
+supports.dom = !!(typeof(window) !== "undefined" && window.document && window.document.createElement);
+supports.workers = typeof(Worker) !== "undefined";
+
+supports.eventListeners = supports.dom && !!environment.window.addEventListener;
+supports.attachEvents = supports.dom && !!environment.window.attachEvent;
+
+supports.viewport = supports.dom && !!environment.window.screen;
+supports.touch = supports.dom && "ontouchstart" in environment.window;
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/is_element/src/index.js */
+
+var isNode = require(46);
+
+
+module.exports = isElement;
+
+
+function isElement(value) {
+    return isNode(value) && value.nodeType === 1;
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/camelize/src/index.js */
+
+var reInflect = require(47),
+    capitalizeString = require(37);
+
+
+module.exports = camelize;
+
+
+function camelize(string, lowFirstLetter) {
+    var parts, part, i, il;
+
+    lowFirstLetter = lowFirstLetter !== false;
+    parts = string.match(reInflect);
+    i = lowFirstLetter ? 0 : -1;
+    il = parts.length - 1;
+
+    while (i++ < il) {
+        parts[i] = capitalizeString(parts[i]);
+    }
+
+    if (lowFirstLetter && (part = parts[0])) {
+        parts[0] = part.charAt(0).toLowerCase() + part.slice(1);
+    }
+
+    return parts.join("");
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/is_node/src/index.js */
+
+var isString = require(29),
+    isNullOrUndefined = require(30),
+    isNumber = require(33),
+    isFunction = require(26);
+
+
+var isNode;
+
+
+if (typeof(Node) !== "undefined" && isFunction(Node)) {
+    isNode = function isNode(value) {
+        return value instanceof Node;
+    };
+} else {
+    isNode = function isNode(value) {
+        return (!isNullOrUndefined(value) &&
+            isNumber(value.nodeType) &&
+            isString(value.nodeName)
+        );
     };
 }
+
+
+module.exports = isNode;
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/re_inflect/src/index.js */
+
+module.exports = /[^A-Z-_ ]+|[A-Z][^A-Z-_ ]+|[^a-z-_ ]+/g;
 
 
 },
@@ -1880,9 +2029,9 @@ function prefixArray(prefix, array) {
 function(require, exports, module, undefined, global) {
 /* ../../node_modules/color/src/index.js */
 
-var mathf = require(45),
-    vec3 = require(46),
-    vec4 = require(47),
+var mathf = require(51),
+    vec3 = require(52),
+    vec4 = require(53),
     isNumber = require(33);
 
 
@@ -2248,7 +2397,7 @@ var colorNames = color.colorNames = {
 function(require, exports, module, undefined, global) {
 /* ../../src/manipulators/toStyle.js */
 
-var color = require(43);
+var color = require(49);
 
 
 module.exports = toStyle;
@@ -2268,7 +2417,7 @@ function(require, exports, module, undefined, global) {
 /* ../../node_modules/color/node_modules/mathf/src/index.js */
 
 var keys = require(18),
-    isNaN = require(48);
+    isNaN = require(54);
 
 
 var mathf = exports,
@@ -2667,7 +2816,7 @@ mathf.direction = function(x, y) {
 function(require, exports, module, undefined, global) {
 /* ../../node_modules/color/node_modules/vec3/src/index.js */
 
-var mathf = require(45);
+var mathf = require(51);
 
 
 var vec3 = exports;
@@ -3062,7 +3211,7 @@ vec3.str = function(out) {
 function(require, exports, module, undefined, global) {
 /* ../../node_modules/color/node_modules/vec4/src/index.js */
 
-var mathf = require(45);
+var mathf = require(51);
 
 
 var vec4 = exports;

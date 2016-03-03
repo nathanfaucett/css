@@ -1,11 +1,11 @@
 var environment = require("environment"),
-    createPrefix = require("./createPrefix");
+    getCurrentStyle = require("get_current_style"),
+    Prefix = require("./Prefix");
 
 
-var win = environment.window,
-    doc = environment.document,
+var document = environment.document,
 
-    styles = win.getComputedStyle(doc.documentElement, ""),
+    styles = getCurrentStyle(document.documentElement || document.body.parentNode),
 
     pre = (
         Array.prototype.slice.call(styles).join("").match(/-(moz|webkit|ms)-/) ||
@@ -14,5 +14,4 @@ var win = environment.window,
 
     dom = ("WebKit|Moz|MS|O").match(new RegExp("(" + pre + ")", "i"))[1];
 
-
-module.exports = [createPrefix(dom, pre)];
+module.exports = [new Prefix(dom, pre)];

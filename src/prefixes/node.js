@@ -1,5 +1,5 @@
 var forEach = require("for_each"),
-    createPrefix = require("./createPrefix");
+    Prefix = require("./Prefix");
 
 
 var prefixes = module.exports = [];
@@ -11,5 +11,5 @@ forEach([
     ["MS", "ms"],
     ["O", "o"]
 ], function(value) {
-    prefixes[prefixes.length] = createPrefix(value[0], value[1]);
+    prefixes[prefixes.length] = new Prefix(value[0], value[1]);
 });
