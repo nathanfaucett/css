@@ -1,5 +1,17 @@
-(function(dependencies, undefined, global) {
+(function(dependencies, chunks, undefined, global) {
+    
     var cache = [];
+    
+
+    function Module() {
+        this.id = null;
+        this.filename = null;
+        this.dirname = null;
+        this.exports = {};
+        this.loaded = false;
+    }
+
+    Module.prototype.require = require;
 
     function require(index) {
         var module = cache[index],
@@ -9,14 +21,13 @@
             return module.exports;
         } else {
             callback = dependencies[index];
-            exports = {};
 
-            cache[index] = module = {
-                exports: exports,
-                require: require
-            };
+            cache[index] = module = new Module();
+            exports = module.exports;
 
-            callback.call(exports, require, exports, module, global);
+            callback.call(exports, require, exports, module, undefined, global);
+            module.loaded = true;
+
             return module.exports;
         }
     }
@@ -24,6 +35,14 @@
     require.resolve = function(path) {
         return path;
     };
+
+    
+
+    require.async = function async(index, callback) {
+        callback(require(index));
+    };
+
+    
 
     if (typeof(define) === "function" && define.amd) {
         define([], function() {
@@ -37,7 +56,8 @@
         
     }
 }([
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* index.js */
 
 var css = global.css = require(1);
 
@@ -46,7 +66,12 @@ var styles = {};
 
 
 css.alignContent(styles, "left");
-css.transition(styles, "background 200ms linear 0ms", "opacity 100ms linear 0ms");
+css.transition(
+    styles,
+    "background 200ms "+ css.easing.inOut +" 0ms",
+    "opacity 100ms "+ css.easing.out +" 0ms",
+    "width 100ms "+ css.easing["in"] +" 0ms"
+);
 css.textShadow(styles, "0 0 2px #000", "0 2px 2px #000");
 
 
@@ -54,16 +79,17 @@ console.log(styles);
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/index.js */
 
 var forEach = require(2),
-    indexOf = require(18),
-    fastSlice = require(19),
-    prefix = require(20),
-    properties = require(27),
-    transition = require(28),
-    textShadow = require(30),
-    nonPrefixProperties = require(31);
+    indexOf = require(3),
+    fastSlice = require(4),
+    prefix = require(5),
+    properties = require(6),
+    transition = require(7),
+    textShadow = require(8),
+    nonPrefixProperties = require(9);
 
 
 var css = exports;
@@ -82,7 +108,7 @@ forEach(properties, function(key) {
     }
 });
 
-css.opacity = require(32);
+css.opacity = require(10);
 
 css.transition = function(styles) {
     return transition(styles, fastSlice(arguments, 1));
@@ -92,24 +118,26 @@ css.textShadow = function(styles) {
 };
 
 css.stopPrefix = false;
-css.prefixes = require(21);
+css.prefixes = require(11);
 css.properties = properties;
 
-css.colors = require(33);
-css.Styles = require(34);
+css.easing = require(12);
+css.colors = require(13);
+css.Styles = require(14);
 
-css.darken = require(35);
-css.fade = require(42);
-css.lighten = require(43);
+css.darken = require(15);
+css.fade = require(16);
+css.lighten = require(17);
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/src/index.js */
 
-var keys = require(3),
-    isNullOrUndefined = require(7),
-    fastBindThis = require(13),
-    isArrayLike = require(15);
+var keys = require(18),
+    isNullOrUndefined = require(19),
+    fastBindThis = require(20),
+    isArrayLike = require(21);
 
 
 module.exports = forEach;
@@ -152,376 +180,11 @@ function forEachObject(object, callback) {
 
 
 },
-function(require, exports, module, global) {
-
-var has = require(4),
-    isNative = require(5),
-    isObject = require(12);
-
-
-var nativeKeys = Object.keys;
-
-
-module.exports = keys;
-
-
-function keys(obj) {
-    return nativeKeys(isObject(obj) ? obj : Object(obj));
-}
-
-if (!isNative(nativeKeys)) {
-    nativeKeys = function keys(obj) {
-        var localHas = has,
-            out = [],
-            i = 0,
-            key;
-
-        for (key in obj) {
-            if (localHas(obj, key)) {
-                out[i++] = key;
-            }
-        }
-
-        return out;
-    };
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isNative = require(5),
-    getPrototypeOf = require(11),
-    isNullOrUndefined = require(7);
-
-
-var nativeHasOwnProp = Object.prototype.hasOwnProperty,
-    baseHas;
-
-
-module.exports = has;
-
-
-function has(object, key) {
-    if (isNullOrUndefined(object)) {
-        return false;
-    } else {
-        return baseHas(object, key);
-    }
-}
-
-if (isNative(nativeHasOwnProp)) {
-    baseHas = function baseHas(object, key) {
-        return nativeHasOwnProp.call(object, key);
-    };
-} else {
-    baseHas = function baseHas(object, key) {
-        var proto = getPrototypeOf(object);
-
-        if (isNullOrUndefined(proto)) {
-            return key in object;
-        } else {
-            return (key in object) && (!(key in proto) || proto[key] !== object[key]);
-        }
-    };
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isFunction = require(6),
-    isNullOrUndefined = require(7),
-    escapeRegExp = require(8);
-
-
-var reHostCtor = /^\[object .+?Constructor\]$/,
-
-    functionToString = Function.prototype.toString,
-
-    reNative = RegExp("^" +
-        escapeRegExp(Object.prototype.toString)
-        .replace(/toString|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
-    ),
-
-    isHostObject;
-
-
-module.exports = isNative;
-
-
-function isNative(value) {
-    return !isNullOrUndefined(value) && (
-        isFunction(value) ?
-        reNative.test(functionToString.call(value)) : (
-            typeof(value) === "object" && (
-                (isHostObject(value) ? reNative : reHostCtor).test(value) || false
-            )
-        )
-    ) || false;
-}
-
-try {
-    String({
-        "toString": 0
-    } + "");
-} catch (e) {
-    isHostObject = function isHostObject() {
-        return false;
-    };
-}
-
-isHostObject = function isHostObject(value) {
-    return !isFunction(value.toString) && typeof(value + "") === "string";
-};
-
-
-},
-function(require, exports, module, global) {
-
-var objectToString = Object.prototype.toString,
-    isFunction;
-
-
-if (objectToString.call(function() {}) === "[object Object]") {
-    isFunction = function isFunction(value) {
-        return value instanceof Function;
-    };
-} else if (typeof(/./) === "function" || (typeof(Uint8Array) !== "undefined" && typeof(Uint8Array) !== "function")) {
-    isFunction = function isFunction(value) {
-        return objectToString.call(value) === "[object Function]";
-    };
-} else {
-    isFunction = function isFunction(value) {
-        return typeof(value) === "function" || false;
-    };
-}
-
-
-module.exports = isFunction;
-
-
-},
-function(require, exports, module, global) {
-
-module.exports = isNullOrUndefined;
-
-/**
-  isNullOrUndefined accepts any value and returns true
-  if the value is null or undefined. For all other values
-  false is returned.
-  
-  @param {Any}        any value to test
-  @returns {Boolean}  the boolean result of testing value
-
-  @example
-    isNullOrUndefined(null);   // returns true
-    isNullOrUndefined(undefined);   // returns true
-    isNullOrUndefined("string");    // returns false
-**/
-function isNullOrUndefined(obj) {
-    return (obj === null || obj === void 0);
-}
-
-
-},
-function(require, exports, module, global) {
-
-var toString = require(9);
-
-
-var reRegExpChars = /[.*+?\^${}()|\[\]\/\\]/g,
-    reHasRegExpChars = new RegExp(reRegExpChars.source);
-
-
-module.exports = escapeRegExp;
-
-
-function escapeRegExp(string) {
-    string = toString(string);
-    return (
-        (string && reHasRegExpChars.test(string)) ?
-        string.replace(reRegExpChars, "\\$&") :
-        string
-    );
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isString = require(10),
-    isNullOrUndefined = require(7);
-
-
-module.exports = toString;
-
-
-function toString(value) {
-    if (isString(value)) {
-        return value;
-    } else if (isNullOrUndefined(value)) {
-        return "";
-    } else {
-        return value + "";
-    }
-}
-
-
-},
-function(require, exports, module, global) {
-
-module.exports = isString;
-
-
-function isString(obj) {
-    return typeof(obj) === "string" || false;
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isObject = require(12),
-    isNative = require(5),
-    isNullOrUndefined = require(7);
-
-
-var nativeGetPrototypeOf = Object.getPrototypeOf;
-
-
-module.exports = getPrototypeOf;
-
-
-function getPrototypeOf(obj) {
-    return isNullOrUndefined(obj) ? null : nativeGetPrototypeOf(
-        (isObject(obj) ? obj : Object(obj))
-    );
-}
-
-if (!isNative(nativeGetPrototypeOf)) {
-    nativeGetPrototypeOf = function getPrototypeOf(obj) {
-        return obj.__proto__ || (
-            obj.constructor ? obj.constructor.prototype : null
-        );
-    };
-}
-
-
-},
-function(require, exports, module, global) {
-
-module.exports = isObject;
-
-
-function isObject(obj) {
-    var type = typeof(obj);
-    return type === "function" || (obj && type === "object") || false;
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isNumber = require(14);
-
-
-module.exports = fastBindThis;
-
-
-function fastBindThis(callback, thisArg, length) {
-    switch ((isNumber(length) ? length : callback.length) || 0) {
-        case 0:
-            return function bound() {
-                return callback.call(thisArg);
-            };
-        case 1:
-            return function bound(a1) {
-                return callback.call(thisArg, a1);
-            };
-        case 2:
-            return function bound(a1, a2) {
-                return callback.call(thisArg, a1, a2);
-            };
-        case 3:
-            return function bound(a1, a2, a3) {
-                return callback.call(thisArg, a1, a2, a3);
-            };
-        case 4:
-            return function bound(a1, a2, a3, a4) {
-                return callback.call(thisArg, a1, a2, a3, a4);
-            };
-        default:
-            return function bound() {
-                return callback.apply(thisArg, arguments);
-            };
-    }
-}
-
-
-},
-function(require, exports, module, global) {
-
-module.exports = isNumber;
-
-
-function isNumber(obj) {
-    return typeof(obj) === "number" || false;
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isLength = require(16),
-    isFunction = require(6),
-    isObjectLike = require(17);
-
-
-module.exports = isArrayLike;
-
-
-function isArrayLike(value) {
-    return isObjectLike(value) && isLength(value.length) && !isFunction(value);
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isNumber = require(14);
-
-
-var MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
-
-
-module.exports = isLength;
-
-
-function isLength(value) {
-    return isNumber(value) && value > -1 && value % 1 === 0 && value <= MAX_SAFE_INTEGER;
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isNullOrUndefined = require(7);
-
-
-module.exports = isObjectLike;
-
-
-function isObjectLike(value) {
-    return (!isNullOrUndefined(value) && typeof(value) === "object") || false;
-}
-
-
-},
-function(require, exports, module, global) {
-
-var isLength = require(16),
-    isObjectLike = require(17);
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/index_of/src/index.js */
+
+var isLength = require(34),
+    isObjectLike = require(35);
 
 
 module.exports = indexOf;
@@ -546,20 +209,25 @@ function arrayIndexOf(array, value, fromIndex) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/fast_slice/src/index.js */
+
+var clamp = require(36),
+    isNumber = require(33);
+
 
 module.exports = fastSlice;
 
 
 function fastSlice(array, offset) {
-    var length, i, il, result, j;
+    var length = array.length,
+        newLength, i, il, result, j;
 
-    offset = offset || 0;
-
-    length = array.length;
+    offset = clamp(isNumber(offset) ? offset : 0, 0, length);
     i = offset - 1;
     il = length - 1;
-    result = new Array(length - offset);
+    newLength = length - offset;
+    result = new Array(newLength);
     j = 0;
 
     while (i++ < il) {
@@ -571,10 +239,11 @@ function fastSlice(array, offset) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/prefix.js */
 
-var prefixes = require(21),
-    capitalizeString = require(25);
+var prefixes = require(11),
+    capitalizeString = require(37);
 
 
 module.exports = prefix;
@@ -601,125 +270,8 @@ function prefix(styles, key, value, prefixValue, stopPrefix) {
 
 
 },
-function(require, exports, module, global) {
-
-var environment = require(22);
-
-
-if (environment.browser) {
-    module.exports = require(23);
-} else {
-    module.exports = require(26);
-}
-
-
-},
-function(require, exports, module, global) {
-
-var environment = exports,
-
-    hasWindow = typeof(window) !== "undefined",
-    userAgent = hasWindow ? window.navigator.userAgent : "";
-
-
-environment.worker = typeof(importScripts) !== "undefined";
-
-environment.browser = environment.worker || !!(
-    hasWindow &&
-    typeof(navigator) !== "undefined" &&
-    window.document
-);
-
-environment.node = !environment.worker && !environment.browser;
-
-environment.mobile = environment.browser && /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
-
-environment.window = (
-    hasWindow ? window :
-    typeof(global) !== "undefined" ? global :
-    typeof(self) !== "undefined" ? self : {}
-);
-
-environment.pixelRatio = environment.window.devicePixelRatio || 1;
-
-environment.document = typeof(document) !== "undefined" ? document : {};
-
-
-},
-function(require, exports, module, global) {
-
-var environment = require(22),
-    createPrefix = require(24);
-
-
-var win = environment.window,
-    doc = environment.document,
-
-    styles = win.getComputedStyle(doc.documentElement, ""),
-
-    pre = (
-        Array.prototype.slice.call(styles).join("").match(/-(moz|webkit|ms)-/) ||
-        (styles.OLink === "" && ["", "0"])
-    )[1],
-
-    dom = ("WebKit|Moz|MS|O").match(new RegExp("(" + pre + ")", "i"))[1];
-
-
-module.exports = [createPrefix(dom, pre)];
-
-
-},
-function(require, exports, module, global) {
-
-var capitalizeString = require(25);
-
-
-module.exports = createPrefix;
-
-
-function createPrefix(dom, pre) {
-    return {
-        dom: dom,
-        lowercase: pre,
-        css: "-" + pre + "-",
-        js: capitalizeString(pre)
-    };
-}
-
-
-},
-function(require, exports, module, global) {
-
-module.exports = capitalizeString;
-
-
-function capitalizeString(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-
-},
-function(require, exports, module, global) {
-
-var forEach = require(2),
-    createPrefix = require(24);
-
-
-var prefixes = module.exports = [];
-
-
-forEach([
-    ["WebKit", "webkit"],
-    ["Moz", "moz"],
-    ["MS", "ms"],
-    ["O", "o"]
-], function(value) {
-    prefixes[prefixes.length] = createPrefix(value[0], value[1]);
-});
-
-
-},
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/properties.js */
 
 module.exports = [
     "parentRule",
@@ -962,10 +514,11 @@ module.exports = [
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/transition.js */
 
-var prefixes = require(21),
-    prefixArray = require(29);
+var prefixes = require(11),
+    prefixArray = require(42);
 
 
 module.exports = transition;
@@ -994,29 +547,10 @@ function transition(styles, transitions) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/textShadow.js */
 
-module.exports = prefixArray;
-
-
-function prefixArray(prefix, array) {
-    var length = array.length,
-        i = -1,
-        il = length - 1,
-        out = new Array(length);
-
-    while (i++ < il) {
-        out[i] = prefix + array[i];
-    }
-
-    return out;
-}
-
-
-},
-function(require, exports, module, global) {
-
-var prefixes = require(21);
+var prefixes = require(11);
 
 
 module.exports = textShadow;
@@ -1045,7 +579,8 @@ function textShadow(styles, textShadows) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/nonPrefixProperties.js */
 
 module.exports = [
     "parentRule",
@@ -1250,9 +785,10 @@ module.exports = [
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/opacity.js */
 
-var prefix = require(20);
+var prefix = require(5);
 
 
 module.exports = opacity;
@@ -1269,7 +805,67 @@ function opacity(styles, value) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/prefixes/index.js */
+
+var environment = require(38);
+
+
+if (environment.browser) {
+    module.exports = require(39);
+} else {
+    module.exports = require(40);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../src/easing.js */
+
+var easing = exports;
+
+
+easing.linear = "linear";
+
+easing.inSine = "cubic-bezier(0.47, 0, 0.745, 0.715)";
+easing.outSine = "cubic-bezier(0.39, 0.575, 0.565, 1)";
+easing.inOutSine = "cubic-bezier(0.445, 0.05, 0.55, 0.95)";
+
+easing.inQuad = "cubic-bezier(0.55, 0.085, 0.68, 0.53)";
+easing.outQuad = "cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+easing.inOutQuad = "cubic-bezier(0.455, 0.03, 0.515, 0.955)";
+
+easing.inCubic = "cubic-bezier(0.55, 0.055, 0.675, 0.19)";
+easing.outCubic = "cubic-bezier(0.215, 0.61, 0.355, 1)";
+easing.inOutCubic = "cubic-bezier(0.645, 0.045, 0.355, 1)";
+
+easing.inQuart = "cubic-bezier(0.895, 0.03, 0.685, 0.22)";
+easing.outQuart = "cubic-bezier(0.165, 0.84, 0.44, 1)";
+easing.inOutQuart = "cubic-bezier(0.77, 0, 0.175, 1)";
+
+easing.inQuint = "cubic-bezier(0.755, 0.05, 0.855, 0.06)";
+easing.outQuint = "cubic-bezier(0.23, 1, 0.32, 1)";
+easing.inOutQuint = "cubic-bezier(0.86, 0, 0.07, 1)";
+
+easing.inExpo = "cubic-bezier(0.95, 0.05, 0.795, 0.035)";
+easing.outExpo = "cubic-bezier(0.19, 1, 0.22, 1)";
+easing.inOutExpo = "cubic-bezier(1, 0, 0, 1)";
+
+easing.inCirc = "cubic-bezier(0.6, 0.04, 0.98, 0.335)";
+easing.outCirc = "cubic-bezier(0.075, 0.82, 0.165, 1)";
+easing.inOutCirc = "cubic-bezier(0.785, 0.135, 0.15, 0.86)";
+
+easing.inBack = "cubic-bezier(0.6, -0.28, 0.735, 0.045)";
+easing.outBack = "cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+easing.inOutBack = "cubic-bezier(0.68, -0.55, 0.265, 1.55)";
+
+easing["in"] = "cubic-bezier(0.755, 0.05, 0.855, 0.06)";
+easing.out = "cubic-bezier(0.23, 1, 0.32, 1)";
+easing.inOut = "cubic-bezier(0.445, 0.05, 0.55, 0.95)";
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../src/colors.js */
 
 module.exports = {
     red50: "#ffebee",
@@ -1562,16 +1158,17 @@ module.exports = {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/Styles.js */
 
 var forEach = require(2),
-    indexOf = require(18),
-    capitalizeString = require(25),
-    transition = require(28),
-    textShadow = require(30),
-    properties = require(27),
-    nonPrefixProperties = require(31),
-    prefix = require(20);
+    indexOf = require(3),
+    capitalizeString = require(37),
+    transition = require(7),
+    textShadow = require(8),
+    properties = require(6),
+    nonPrefixProperties = require(9),
+    prefix = require(5);
 
 
 var Array_slice = Array.prototype.slice,
@@ -1610,10 +1207,11 @@ StylesPrototype.setTextShadow = function() {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/manipulators/darken.js */
 
-var color = require(36),
-    toStyle = require(41);
+var color = require(43),
+    toStyle = require(44);
 
 
 var darken_color = color.create();
@@ -1635,12 +1233,657 @@ function darken(style, amount) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/manipulators/fade.js */
 
-var mathf = require(37),
-    vec3 = require(39),
-    vec4 = require(40),
-    isNumber = require(14);
+var color = require(43),
+    toStyle = require(44);
+
+
+var fade_color = color.create();
+
+
+module.exports = fade;
+
+
+function fade(style, amount) {
+    var value = fade_color;
+    color.fromStyle(value, style);
+    value[3] *= amount;
+    return toStyle(value);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../src/manipulators/lighten.js */
+
+var color = require(43),
+    toStyle = require(44);
+
+
+var lighten_color = color.create();
+
+
+module.exports = lighten;
+
+
+function lighten(style, amount) {
+    var value = lighten_color,
+        alpha;
+    color.fromStyle(value, style);
+    alpha = value[3];
+    color.smul(value, value, 1 + amount);
+    color.cnormalize(value, value);
+    value[3] = alpha;
+    return toStyle(value);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/keys/src/index.js */
+
+var has = require(22),
+    isNative = require(23),
+    isObject = require(24);
+
+
+var nativeKeys = Object.keys;
+
+
+module.exports = keys;
+
+
+function keys(obj) {
+    return nativeKeys(isObject(obj) ? obj : Object(obj));
+}
+
+if (!isNative(nativeKeys)) {
+    nativeKeys = function keys(obj) {
+        var localHas = has,
+            out = [],
+            i = 0,
+            key;
+
+        for (key in obj) {
+            if (localHas(obj, key)) {
+                out[i++] = key;
+            }
+        }
+
+        return out;
+    };
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/is_null_or_undefined/src/isNullOrUndefined.js */
+
+module.exports = isNullOrUndefined;
+
+/**
+  isNullOrUndefined accepts any value and returns true
+  if the value is null or undefined. For all other values
+  false is returned.
+  
+  @param {Any}        any value to test
+  @returns {Boolean}  the boolean result of testing value
+
+  @example
+    isNullOrUndefined(null);   // returns true
+    isNullOrUndefined(undefined);   // returns true
+    isNullOrUndefined("string");    // returns false
+**/
+function isNullOrUndefined(obj) {
+    return (obj === null || obj === void 0);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/fast_bind_this/src/index.js */
+
+var isNumber = require(33);
+
+
+module.exports = fastBindThis;
+
+
+function fastBindThis(callback, thisArg, length) {
+    switch ((isNumber(length) ? length : callback.length) || 0) {
+        case 0:
+            return function bound() {
+                return callback.call(thisArg);
+            };
+        case 1:
+            return function bound(a1) {
+                return callback.call(thisArg, a1);
+            };
+        case 2:
+            return function bound(a1, a2) {
+                return callback.call(thisArg, a1, a2);
+            };
+        case 3:
+            return function bound(a1, a2, a3) {
+                return callback.call(thisArg, a1, a2, a3);
+            };
+        case 4:
+            return function bound(a1, a2, a3, a4) {
+                return callback.call(thisArg, a1, a2, a3, a4);
+            };
+        default:
+            return function bound() {
+                return callback.apply(thisArg, arguments);
+            };
+    }
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/is_array_like/src/index.js */
+
+var isLength = require(34),
+    isFunction = require(26),
+    isObjectLike = require(35);
+
+
+module.exports = isArrayLike;
+
+
+function isArrayLike(value) {
+    return isObjectLike(value) && isLength(value.length) && !isFunction(value);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/keys/node_modules/has/src/index.js */
+
+var isNative = require(23),
+    getPrototypeOf = require(25),
+    isNullOrUndefined = require(19);
+
+
+var nativeHasOwnProp = Object.prototype.hasOwnProperty,
+    baseHas;
+
+
+module.exports = has;
+
+
+function has(object, key) {
+    if (isNullOrUndefined(object)) {
+        return false;
+    } else {
+        return baseHas(object, key);
+    }
+}
+
+if (isNative(nativeHasOwnProp)) {
+    baseHas = function baseHas(object, key) {
+        return nativeHasOwnProp.call(object, key);
+    };
+} else {
+    baseHas = function baseHas(object, key) {
+        var proto = getPrototypeOf(object);
+
+        if (isNullOrUndefined(proto)) {
+            return key in object;
+        } else {
+            return (key in object) && (!(key in proto) || proto[key] !== object[key]);
+        }
+    };
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/keys/node_modules/is_native/src/index.js */
+
+var isFunction = require(26),
+    isNullOrUndefined = require(19),
+    escapeRegExp = require(27);
+
+
+var reHostCtor = /^\[object .+?Constructor\]$/,
+
+    functionToString = Function.prototype.toString,
+
+    reNative = RegExp("^" +
+        escapeRegExp(Object.prototype.toString)
+        .replace(/toString|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
+    ),
+
+    isHostObject;
+
+
+module.exports = isNative;
+
+
+function isNative(value) {
+    return !isNullOrUndefined(value) && (
+        isFunction(value) ?
+        reNative.test(functionToString.call(value)) : (
+            typeof(value) === "object" && (
+                (isHostObject(value) ? reNative : reHostCtor).test(value) || false
+            )
+        )
+    ) || false;
+}
+
+try {
+    String({
+        "toString": 0
+    } + "");
+} catch (e) {
+    isHostObject = function isHostObject() {
+        return false;
+    };
+}
+
+isHostObject = function isHostObject(value) {
+    return !isFunction(value.toString) && typeof(value + "") === "string";
+};
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/keys/node_modules/is_object/src/index.js */
+
+var isNull = require(31);
+
+
+module.exports = isObject;
+
+
+function isObject(value) {
+    var type = typeof(value);
+    return type === "function" || (!isNull(value) && type === "object") || false;
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/get_prototype_of/src/index.js */
+
+var isObject = require(24),
+    isNative = require(23),
+    isNullOrUndefined = require(30);
+
+
+var nativeGetPrototypeOf = Object.getPrototypeOf,
+    baseGetPrototypeOf;
+
+
+module.exports = getPrototypeOf;
+
+
+function getPrototypeOf(value) {
+    if (isNullOrUndefined(value)) {
+        return null;
+    } else {
+        return baseGetPrototypeOf(value);
+    }
+}
+
+if (isNative(nativeGetPrototypeOf)) {
+    baseGetPrototypeOf = function baseGetPrototypeOf(value) {
+        return nativeGetPrototypeOf(isObject(value) ? value : Object(value)) || null;
+    };
+} else {
+    if ("".__proto__ === String.prototype) {
+        baseGetPrototypeOf = function baseGetPrototypeOf(value) {
+            return value.__proto__ || null;
+        };
+    } else {
+        baseGetPrototypeOf = function baseGetPrototypeOf(value) {
+            return value.constructor ? value.constructor.prototype : null;
+        };
+    }
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/is_function/src/index.js */
+
+var objectToString = Object.prototype.toString,
+    isFunction;
+
+
+if (objectToString.call(function() {}) === "[object Object]") {
+    isFunction = function isFunction(value) {
+        return value instanceof Function;
+    };
+} else if (typeof(/./) === "function" || (typeof(Uint8Array) !== "undefined" && typeof(Uint8Array) !== "function")) {
+    isFunction = function isFunction(value) {
+        return objectToString.call(value) === "[object Function]";
+    };
+} else {
+    isFunction = function isFunction(value) {
+        return typeof(value) === "function" || false;
+    };
+}
+
+
+module.exports = isFunction;
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/escape_regexp/src/index.js */
+
+var toString = require(28);
+
+
+var reRegExpChars = /[.*+?\^${}()|\[\]\/\\]/g,
+    reHasRegExpChars = new RegExp(reRegExpChars.source);
+
+
+module.exports = escapeRegExp;
+
+
+function escapeRegExp(string) {
+    string = toString(string);
+    return (
+        (string && reHasRegExpChars.test(string)) ?
+        string.replace(reRegExpChars, "\\$&") :
+        string
+    );
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/to_string/src/index.js */
+
+var isString = require(29),
+    isNullOrUndefined = require(30);
+
+
+module.exports = toString;
+
+
+function toString(value) {
+    if (isString(value)) {
+        return value;
+    } else if (isNullOrUndefined(value)) {
+        return "";
+    } else {
+        return value + "";
+    }
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/is_string/src/index.js */
+
+module.exports = isString;
+
+
+function isString(value) {
+    return typeof(value) === "string" || false;
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/is_null_or_undefined/src/index.js */
+
+var isNull = require(31),
+    isUndefined = require(32);
+
+
+module.exports = isNullOrUndefined;
+
+/**
+  isNullOrUndefined accepts any value and returns true
+  if the value is null or undefined. For all other values
+  false is returned.
+  
+  @param {Any}        any value to test
+  @returns {Boolean}  the boolean result of testing value
+
+  @example
+    isNullOrUndefined(null);   // returns true
+    isNullOrUndefined(undefined);   // returns true
+    isNullOrUndefined("string");    // returns false
+**/
+function isNullOrUndefined(value) {
+    return isNull(value) || isUndefined(value);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/is_null/src/index.js */
+
+module.exports = isNull;
+
+
+function isNull(value) {
+    return value === null;
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/is_undefined/src/index.js */
+
+module.exports = isUndefined;
+
+
+function isUndefined(value) {
+    return value === void(0);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/fast_bind_this/node_modules/is_number/src/index.js */
+
+module.exports = isNumber;
+
+
+function isNumber(obj) {
+    return typeof(obj) === "number" || false;
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/is_array_like/node_modules/is_length/src/index.js */
+
+var isNumber = require(33);
+
+
+var MAX_SAFE_INTEGER = Math.pow(2, 53) - 1;
+
+
+module.exports = isLength;
+
+
+function isLength(value) {
+    return isNumber(value) && value > -1 && value % 1 === 0 && value <= MAX_SAFE_INTEGER;
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/for_each/node_modules/is_array_like/node_modules/is_object_like/src/index.js */
+
+var isNullOrUndefined = require(19);
+
+
+module.exports = isObjectLike;
+
+
+function isObjectLike(value) {
+    return (!isNullOrUndefined(value) && typeof(value) === "object") || false;
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/clamp/src/index.js */
+
+module.exports = clamp;
+
+
+function clamp(x, min, max) {
+    if (x < min) {
+        return min;
+    } else if (x > max) {
+        return max;
+    } else {
+        return x;
+    }
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/capitalize_string/src/index.js */
+
+module.exports = capitalizeString;
+
+
+function capitalizeString(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/environment/src/index.js */
+
+var environment = exports,
+
+    hasWindow = typeof(window) !== "undefined",
+    userAgent = hasWindow ? window.navigator.userAgent : "";
+
+
+environment.worker = typeof(importScripts) !== "undefined";
+
+environment.browser = environment.worker || !!(
+    hasWindow &&
+    typeof(navigator) !== "undefined" &&
+    window.document
+);
+
+environment.node = !environment.worker && !environment.browser;
+
+environment.mobile = environment.browser && /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+
+environment.window = (
+    hasWindow ? window :
+    typeof(global) !== "undefined" ? global :
+    typeof(self) !== "undefined" ? self : {}
+);
+
+environment.pixelRatio = environment.window.devicePixelRatio || 1;
+
+environment.document = typeof(document) !== "undefined" ? document : {};
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../src/prefixes/browser.js */
+
+var environment = require(38),
+    createPrefix = require(41);
+
+
+var win = environment.window,
+    doc = environment.document,
+
+    styles = win.getComputedStyle(doc.documentElement, ""),
+
+    pre = (
+        Array.prototype.slice.call(styles).join("").match(/-(moz|webkit|ms)-/) ||
+        (styles.OLink === "" && ["", "0"])
+    )[1],
+
+    dom = ("WebKit|Moz|MS|O").match(new RegExp("(" + pre + ")", "i"))[1];
+
+
+module.exports = [createPrefix(dom, pre)];
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../src/prefixes/node.js */
+
+var forEach = require(2),
+    createPrefix = require(41);
+
+
+var prefixes = module.exports = [];
+
+
+forEach([
+    ["WebKit", "webkit"],
+    ["Moz", "moz"],
+    ["MS", "ms"],
+    ["O", "o"]
+], function(value) {
+    prefixes[prefixes.length] = createPrefix(value[0], value[1]);
+});
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../src/prefixes/createPrefix.js */
+
+var capitalizeString = require(37);
+
+
+module.exports = createPrefix;
+
+
+function createPrefix(dom, pre) {
+    return {
+        dom: dom,
+        lowercase: pre,
+        css: "-" + pre + "-",
+        js: capitalizeString(pre)
+    };
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../src/prefixArray.js */
+
+module.exports = prefixArray;
+
+
+function prefixArray(prefix, array) {
+    var length = array.length,
+        i = -1,
+        il = length - 1,
+        out = new Array(length);
+
+    while (i++ < il) {
+        out[i] = prefix + array[i];
+    }
+
+    return out;
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/color/src/index.js */
+
+var mathf = require(45),
+    vec3 = require(46),
+    vec4 = require(47),
+    isNumber = require(33);
 
 
 var color = exports;
@@ -2002,10 +2245,30 @@ var colorNames = color.colorNames = {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../src/manipulators/toStyle.js */
 
-var keys = require(3),
-    isNaN = require(38);
+var color = require(43);
+
+
+module.exports = toStyle;
+
+
+function toStyle(value) {
+    if (value[3] === 1) {
+        return color.toHEX(value);
+    } else {
+        return color.toRGBA(value);
+    }
+}
+
+
+},
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/color/node_modules/mathf/src/index.js */
+
+var keys = require(18),
+    isNaN = require(48);
 
 
 var mathf = exports,
@@ -2401,20 +2664,10 @@ mathf.direction = function(x, y) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/color/node_modules/vec3/src/index.js */
 
-var isNumber = require(14);
-
-
-module.exports = Number.isNaN || function isNaN(obj) {
-    return isNumber(obj) && obj !== obj;
-};
-
-
-},
-function(require, exports, module, global) {
-
-var mathf = require(37);
+var mathf = require(45);
 
 
 var vec3 = exports;
@@ -2806,9 +3059,10 @@ vec3.str = function(out) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/color/node_modules/vec4/src/index.js */
 
-var mathf = require(37);
+var mathf = require(45);
 
 
 var vec4 = exports;
@@ -3168,67 +3422,15 @@ vec4.str = function(out) {
 
 
 },
-function(require, exports, module, global) {
+function(require, exports, module, undefined, global) {
+/* ../../node_modules/color/node_modules/mathf/node_modules/is_nan/src/index.js */
 
-var color = require(36);
-
-
-module.exports = toStyle;
+var isNumber = require(33);
 
 
-function toStyle(value) {
-    if (value[3] === 1) {
-        return color.toHEX(value);
-    } else {
-        return color.toRGBA(value);
-    }
-}
+module.exports = Number.isNaN || function isNaN(obj) {
+    return isNumber(obj) && obj !== obj;
+};
 
 
-},
-function(require, exports, module, global) {
-
-var color = require(36),
-    toStyle = require(41);
-
-
-var fade_color = color.create();
-
-
-module.exports = fade;
-
-
-function fade(style, amount) {
-    var value = fade_color;
-    color.fromStyle(value, style);
-    value[3] *= amount;
-    return toStyle(value);
-}
-
-
-},
-function(require, exports, module, global) {
-
-var color = require(36),
-    toStyle = require(41);
-
-
-var lighten_color = color.create();
-
-
-module.exports = lighten;
-
-
-function lighten(style, amount) {
-    var value = lighten_color,
-        alpha;
-    color.fromStyle(value, style);
-    alpha = value[3];
-    color.smul(value, value, 1 + amount);
-    color.cnormalize(value, value);
-    value[3] = alpha;
-    return toStyle(value);
-}
-
-
-}], void 0, (new Function("return this;"))()));
+}], null, void(0), (new Function("return this;"))()));

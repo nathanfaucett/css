@@ -37,6 +37,7 @@ css.stopPrefix = false;
 css.prefixes = require("./prefixes");
 css.properties = properties;
 
+css.easing = require("./easing");
 css.colors = require("./colors");
 css.Styles = require("./Styles");
 
