@@ -23,11 +23,11 @@
     "grunt-jsbeautifier": "^0.2.7"
   },
   "dependencies": {
+    "array-for_each": "git://github.com/nathanfaucett/array-for_each.git",
     "capitalize_string": "git://github.com/nathanfaucett/capitalize_string.git",
     "color": "git://github.com/nathanfaucett/color.git",
     "environment": "git://github.com/nathanfaucett/environment.git",
     "fast_slice": "git://github.com/nathanfaucett/fast_slice.git",
-    "for_each": "git://github.com/nathanfaucett/for_each.git",
     "get_current_style": "git://github.com/nathanfaucett/get_current_style.git",
     "index_of": "git://github.com/nathanfaucett/index_of.git"
   }

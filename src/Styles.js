@@ -1,4 +1,4 @@
-var forEach = require("for_each"),
+var arrayForEach = require("array-for_each"),
     indexOf = require("index_of"),
     capitalizeString = require("capitalize_string"),
     transition = require("./transition"),
@@ -21,7 +21,7 @@ var css = require("./index");
 function Styles() {}
 StylesPrototype = Styles.prototype;
 
-forEach(properties, function(key) {
+arrayForEach(properties, function(key) {
     if (indexOf(nonPrefixProperties, key) === -1) {
         StylesPrototype["set" + capitalizeString(key)] = function(value) {
             return prefix(this, key, value, null, css.stopPrefix);

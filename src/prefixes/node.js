@@ -1,15 +1,9 @@
-var forEach = require("for_each"),
-    Prefix = require("./Prefix");
+var Prefix = require("./Prefix");
 
 
-var prefixes = module.exports = [];
-
-
-forEach([
-    ["WebKit", "webkit"],
-    ["Moz", "moz"],
-    ["MS", "ms"],
-    ["O", "o"]
-], function(value) {
-    prefixes[prefixes.length] = new Prefix(value[0], value[1]);
-});
+module.exports = [
+    new Prefix("WebKit", "webkit"),
+    new Prefix("Moz", "moz"),
+    new Prefix("MS", "ms"),
+    new Prefix("O", "o")
+];

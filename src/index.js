@@ -1,4 +1,4 @@
-var forEach = require("for_each"),
+var arrayForEach = require("array-for_each"),
     indexOf = require("index_of"),
     fastSlice = require("fast_slice"),
     prefix = require("./prefix"),
@@ -11,7 +11,7 @@ var forEach = require("for_each"),
 var css = exports;
 
 
-forEach(properties, function(key) {
+arrayForEach(properties, function(key) {
     if (indexOf(nonPrefixProperties, key) === -1) {
         css[key] = function(styles, value) {
             return prefix(styles, key, value, null, css.stopPrefix);

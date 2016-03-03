@@ -14,4 +14,5 @@ var document = environment.document,
 
     dom = ("WebKit|Moz|MS|O").match(new RegExp("(" + pre + ")", "i"))[1];
 
+
 module.exports = [new Prefix(dom, pre)];
