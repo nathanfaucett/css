@@ -1,5 +1,5 @@
-var environment = require("environment"),
-    getCurrentStyle = require("get_current_style"),
+var environment = require("@nathanfaucett/environment"),
+    getCurrentStyle = require("@nathanfaucett/get_current_style"),
     Prefix = require("./Prefix");
 
 

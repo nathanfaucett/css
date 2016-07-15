@@ -1,4 +1,4 @@
-var capitalizeString = require("capitalize_string");
+var capitalizeString = require("@nathanfaucett/capitalize_string");
 
 
 module.exports = Prefix;

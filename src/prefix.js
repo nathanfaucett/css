@@ -1,5 +1,5 @@
 var prefixes = require("./prefixes"),
-    capitalizeString = require("capitalize_string");
+    capitalizeString = require("@nathanfaucett/capitalize_string");
 
 
 module.exports = prefix;
