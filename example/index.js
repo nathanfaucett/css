@@ -76,7 +76,7 @@
         }
     };
 
-    global["fUpG1Cqx-n1pO-4lu3-aynd-XpOLtYEACIM4J"] = function(asyncDependencies) {
+    global["TCcBqmCW-zfSW-4OlY-FLur-wZuZv5JkncE9X"] = function(asyncDependencies) {
         var i = -1,
             il = asyncDependencies.length - 1,
             dependency, index;
@@ -127,7 +127,7 @@ console.log(styles);
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/index.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/index.js-=@*/
 var arrayForEach = require(2),
     indexOf = require(3),
     fastSlice = require(4),
@@ -246,7 +246,7 @@ function fastSlice(array, offset) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/prefix.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/prefix.js-=@*/
 var prefixes = require(11),
     capitalizeString = require(21);
 
@@ -275,7 +275,7 @@ function prefix(styles, key, value, prefixValue, stopPrefix) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/properties.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/properties.js-=@*/
 module.exports = [
     "parentRule",
     "length",
@@ -517,9 +517,9 @@ module.exports = [
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/transition.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/transition.js-=@*/
 var prefixes = require(11),
-    prefixArray = require(43);
+    prefixArray = require(42);
 
 
 module.exports = transition;
@@ -548,7 +548,7 @@ function transition(styles, transitions) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/textShadow.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/textShadow.js-=@*/
 var prefixes = require(11);
 
 
@@ -578,7 +578,7 @@ function textShadow(styles, textShadows) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/nonPrefixProperties.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/nonPrefixProperties.js-=@*/
 module.exports = [
     "parentRule",
     "length",
@@ -782,7 +782,7 @@ module.exports = [
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/opacity.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/opacity.js-=@*/
 var prefix = require(5);
 
 
@@ -800,7 +800,7 @@ function opacity(styles, value) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/prefixes/index.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/prefixes/index.js-=@*/
 var environment = require(22);
 
 
@@ -812,7 +812,7 @@ if (environment.browser && !environment.worker) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/easing.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/easing.js-=@*/
 var easing = exports;
 
 
@@ -856,7 +856,7 @@ easing.inOut = "cubic-bezier(0.445, 0.05, 0.55, 0.95)";
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/colors.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/colors.js-=@*/
 module.exports = {
     red50: "#ffebee",
     red100: "#ffcdd2",
@@ -1148,7 +1148,7 @@ module.exports = {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/Styles.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/Styles.js-=@*/
 var arrayForEach = require(2),
     indexOf = require(3),
     capitalizeString = require(21),
@@ -1195,9 +1195,9 @@ StylesPrototype.setTextShadow = function() {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/manipulators/darken.js-=@*/
-var color = require(44),
-    toStyle = require(45);
+/*@=-@nathanfaucett/css@0.0.4/src/manipulators/darken.js-=@*/
+var color = require(43),
+    toStyle = require(44);
 
 
 var darken_color = color.create();
@@ -1219,9 +1219,9 @@ function darken(style, amount) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/manipulators/fade.js-=@*/
-var color = require(44),
-    toStyle = require(45);
+/*@=-@nathanfaucett/css@0.0.4/src/manipulators/fade.js-=@*/
+var color = require(43),
+    toStyle = require(44);
 
 
 var fade_color = color.create();
@@ -1239,9 +1239,9 @@ function fade(style, amount) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/manipulators/lighten.js-=@*/
-var color = require(44),
-    toStyle = require(45);
+/*@=-@nathanfaucett/css@0.0.4/src/manipulators/lighten.js-=@*/
+var color = require(43),
+    toStyle = require(44);
 
 
 var lighten_color = color.create();
@@ -1347,7 +1347,7 @@ environment.document = typeof(document) !== "undefined" ? document : {};
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/prefixes/browser.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/prefixes/browser.js-=@*/
 var environment = require(22),
     getCurrentStyle = require(30),
     Prefix = require(31);
@@ -1369,7 +1369,7 @@ module.exports = [new Prefix(dom, pre)];
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/prefixes/node.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/prefixes/node.js-=@*/
 var Prefix = require(31);
 
 
@@ -3246,7 +3246,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-ieee754@1.1.6/index.js-=@*/
+/*@=-ieee754@1.1.8/index.js-=@*/
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = nBytes * 8 - mLen - 1
@@ -3343,12 +3343,12 @@ module.exports = Array.isArray || function (arr) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/get_current_style@0.0.1/src/index.js-=@*/
+/*@=-@nathanfaucett/get_current_style@0.0.2/src/index.js-=@*/
 var supports = require(32),
-    environment = require(33),
-    isElement = require(34),
-    isString = require(35),
-    camelize = require(36);
+    environment = require(22),
+    isElement = require(33),
+    isString = require(34),
+    camelize = require(35);
 
 
 var baseGetCurrentStyles;
@@ -3389,7 +3389,7 @@ if (supports.dom && environment.document.defaultView) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/prefixes/Prefix.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/prefixes/Prefix.js-=@*/
 var capitalizeString = require(21);
 
 
@@ -3405,8 +3405,8 @@ function Prefix(dom, pre) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/supports@0.0.1/src/index.js-=@*/
-var environment = require(33);
+/*@=-@nathanfaucett/supports@0.0.2/src/index.js-=@*/
+var environment = require(22);
 
 
 var supports = module.exports;
@@ -3423,39 +3423,8 @@ supports.touch = supports.dom && "ontouchstart" in environment.window;
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/environment@0.0.1/src/index.js-=@*/
-var environment = exports,
-
-    hasWindow = typeof(window) !== "undefined",
-    userAgent = hasWindow ? window.navigator.userAgent : "";
-
-
-environment.worker = typeof(importScripts) !== "undefined";
-
-environment.browser = environment.worker || !!(
-    hasWindow &&
-    typeof(navigator) !== "undefined" &&
-    window.document
-);
-
-environment.node = !environment.worker && !environment.browser;
-
-environment.mobile = environment.browser && /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
-
-environment.window = (
-    hasWindow ? window :
-    typeof(global) !== "undefined" ? global :
-    typeof(self) !== "undefined" ? self : {}
-);
-
-environment.pixelRatio = environment.window.devicePixelRatio || 1;
-
-environment.document = typeof(document) !== "undefined" ? document : {};
-
-},
-function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_element@0.0.1/src/index.js-=@*/
-var isNode = require(37);
+var isNode = require(36);
 
 
 module.exports = isElement;
@@ -3478,7 +3447,7 @@ function isString(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/camelize@0.0.1/src/index.js-=@*/
-var reInflect = require(42),
+var reInflect = require(41),
     capitalizeString = require(21);
 
 
@@ -3507,10 +3476,10 @@ function camelize(string, lowFirstLetter) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_node@0.0.1/src/index.js-=@*/
-var isString = require(35),
-    isNullOrUndefined = require(38),
+var isString = require(34),
+    isNullOrUndefined = require(37),
     isNumber = require(20),
-    isFunction = require(39);
+    isFunction = require(38);
 
 
 var isNode;
@@ -3535,8 +3504,8 @@ module.exports = isNode;
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_null_or_undefined@0.0.1/src/index.js-=@*/
-var isNull = require(40),
-    isUndefined = require(41);
+var isNull = require(39),
+    isUndefined = require(40);
 
 
 module.exports = isNullOrUndefined;
@@ -3609,7 +3578,7 @@ module.exports = /[^A-Z-_ ]+|[A-Z][^A-Z-_ ]+|[^a-z-_ ]+/g;
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/prefixArray.js-=@*/
+/*@=-@nathanfaucett/css@0.0.4/src/prefixArray.js-=@*/
 module.exports = prefixArray;
 
 
@@ -3628,13 +3597,13 @@ function prefixArray(prefix, array) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/color@0.0.1/src/index.js-=@*/
-var mathf = require(46),
-    vec3 = require(47),
-    vec4 = require(48),
+/*@=-@nathanfaucett/color@0.0.4/src/index.js-=@*/
+var mathf = require(45),
+    vec3 = require(46),
+    vec4 = require(47),
     isNumber = require(20),
-    isString = require(35),
-    colorNames = require(49);
+    isString = require(34),
+    colorNames = require(48);
 
 
 var color = exports;
@@ -3706,9 +3675,8 @@ color.max = vec4.max;
 
 color.clamp = vec4.clamp;
 
-color.equal = vec4.equal;
-
-color.notEqual = vec4.notEqual;
+color.equals = vec4.equals;
+color.notEquals = vec4.notEquals;
 
 
 var cmin = color.create(0, 0, 0, 0),
@@ -3859,8 +3827,8 @@ color.colorNames = colorNames;
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/css@0.0.2/src/manipulators/toStyle.js-=@*/
-var color = require(44);
+/*@=-@nathanfaucett/css@0.0.4/src/manipulators/toStyle.js-=@*/
+var color = require(43);
 
 
 module.exports = toStyle;
@@ -3876,10 +3844,10 @@ function toStyle(value) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/mathf@0.0.1/src/index.js-=@*/
-var keys = require(50),
+/*@=-@nathanfaucett/mathf@0.0.3/src/index.js-=@*/
+var keys = require(49),
     clamp = require(19),
-    isNaNPolyfill = require(51);
+    isNaNPolyfill = require(50);
 
 
 var mathf = exports,
@@ -4004,6 +3972,14 @@ mathf.log10 = NativeMath.log10 || function log10(x) {
 
 mathf.log2 = NativeMath.log2 || function log2(x) {
     return mathf.log(x) / mathf.LN2;
+};
+
+mathf.fac = function fac(n) {
+    if (n < 2) {
+        return 1;
+    } else {
+        return n * fac(n - 1);
+    }
 };
 
 mathf.max = NativeMath.max;
@@ -4285,8 +4261,8 @@ mathf.direction = function(x, y) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/vec3@0.0.1/src/index.js-=@*/
-var mathf = require(46),
+/*@=-@nathanfaucett/vec3@0.0.3/src/index.js-=@*/
+var mathf = require(45),
     isNumber = require(20);
 
 
@@ -4305,6 +4281,18 @@ vec3.create = function(x, y, z) {
 
     return out;
 };
+
+vec3.up = vec3.create(0.0, 0.0, 1.0);
+vec3.down = vec3.create(0.0, 0.0, -1.0);
+
+vec3.forward = vec3.create(0.0, 1.0, 0.0);
+vec3.backward = vec3.create(0.0, -1.0, 0.0);
+
+vec3.right = vec3.create(1.0, 0.0, 0.0);
+vec3.left = vec3.create(-1.0, 0.0, 0.0);
+
+vec3.zero = vec3.create(0.0, 0.0, 0.0);
+vec3.one = vec3.create(1.0, 1.0, 1.0);
 
 vec3.copy = function(out, a) {
 
@@ -4557,6 +4545,32 @@ vec3.clamp = function(out, a, min, max) {
     return out;
 };
 
+vec3.transformMat2 = function(out, a, m) {
+    var x = a[0],
+        y = a[1],
+        z = a[2];
+
+    out[0] = x * m[0] + y * m[2];
+    out[1] = x * m[1] + y * m[3];
+    out[2] = z;
+
+    return out;
+};
+
+vec3.transformMat32 = function(out, a, m) {
+    var x = a[0],
+        y = a[1],
+        z = a[2];
+
+    out[0] = x * m[0] + y * m[2] + z * m[4];
+    out[1] = x * m[1] + y * m[3] + z * m[5];
+    out[2] = z;
+
+    return out;
+};
+
+vec3.transformMat32Rotation = vec3.transformMat2;
+
 vec3.transformMat3 = function(out, a, m) {
     var x = a[0],
         y = a[1],
@@ -4653,6 +4667,24 @@ vec3.positionFromMat4 = function(out, m) {
     return out;
 };
 
+vec3.scaleFromMat2 = function(out, m) {
+
+    out[0] = vec3.lengthValues(m[0], m[2], 0);
+    out[1] = vec3.lengthValues(m[1], m[3], 0);
+    out[2] = vec3.lengthValues(0, 0, 1);
+
+    return out;
+};
+
+vec3.scaleFromMat32 = function(out, m) {
+
+    out[0] = vec3.lengthValues(m[0], m[2], 0);
+    out[1] = vec3.lengthValues(m[1], m[3], 0);
+    out[2] = vec3.lengthValues(0, 0, 1);
+
+    return out;
+};
+
 vec3.scaleFromMat3 = function(out, m) {
 
     out[0] = vec3.lengthValues(m[0], m[3], m[6]);
@@ -4671,19 +4703,15 @@ vec3.scaleFromMat4 = function(out, m) {
     return out;
 };
 
-vec3.equal = function(a, b) {
-    return !(
-        a[0] !== b[0] ||
-        a[1] !== b[1] ||
-        a[2] !== b[2]
-    );
+vec3.equals = function(a, b) {
+    return !vec3.notEquals(a, b);
 };
 
-vec3.notEqual = function(a, b) {
-    return (
-        a[0] !== b[0] ||
-        a[1] !== b[1] ||
-        a[2] !== b[2]
+vec3.notEquals = function(a, b) {
+    return !(
+        mathf.equals(a[0], b[0]) ||
+        mathf.equals(a[1], b[1]) ||
+        mathf.equals(a[2], b[2])
     );
 };
 
@@ -4695,8 +4723,8 @@ vec3.string = vec3.toString = vec3.str;
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/vec4@0.0.1/src/index.js-=@*/
-var mathf = require(46),
+/*@=-@nathanfaucett/vec4@0.0.3/src/index.js-=@*/
+var mathf = require(45),
     isNumber = require(20);
 
 
@@ -4851,7 +4879,6 @@ vec4.invLengthValues = function(x, y, z, w) {
 };
 
 vec4.dot = function(a, b) {
-
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
 };
 
@@ -5032,21 +5059,15 @@ vec4.scaleFromMat4 = function(out, m) {
     return out;
 };
 
-vec4.equal = function(a, b) {
-    return !(
-        a[0] !== b[0] ||
-        a[1] !== b[1] ||
-        a[2] !== b[2] ||
-        a[3] !== b[3]
-    );
+vec4.equals = function(a, b, e) {
+    return !vec4.notEquals(a, b, e);
 };
 
-vec4.notEqual = function(a, b) {
-    return (
-        a[0] !== b[0] ||
-        a[1] !== b[1] ||
-        a[2] !== b[2] ||
-        a[3] !== b[3]
+vec4.notEquals = function(a, b, e) {
+    return (!mathf.equals(a[0], b[0], e) ||
+        !mathf.equals(a[1], b[1], e) ||
+        !mathf.equals(a[2], b[2], e) ||
+        !mathf.equals(a[3], b[3], e)
     );
 };
 
@@ -5058,7 +5079,7 @@ vec4.string = vec4.toString = vec4.str;
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/color@0.0.1/src/colorNames.js-=@*/
+/*@=-@nathanfaucett/color@0.0.4/src/colorNames.js-=@*/
 module.exports = {
     aliceblue: "#f0f8ff",
     antiquewhite: "#faebd7",
@@ -5205,11 +5226,11 @@ module.exports = {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/keys@0.0.1/src/index.js-=@*/
-var has = require(52),
-    isNative = require(53),
-    isNullOrUndefined = require(38),
-    isObject = require(54);
+/*@=-@nathanfaucett/keys@0.0.2/src/index.js-=@*/
+var has = require(51),
+    isNative = require(52),
+    isNullOrUndefined = require(37),
+    isObject = require(53);
 
 
 var nativeKeys = Object.keys;
@@ -5245,7 +5266,7 @@ if (!isNative(nativeKeys)) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/is_nan@0.0.1/src/index.js-=@*/
+/*@=-@nathanfaucett/is_nan@0.0.2/src/index.js-=@*/
 var isNumber = require(20);
 
 
@@ -5255,10 +5276,10 @@ module.exports = Number.isNaN || function isNaN(value) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/has@0.0.1/src/index.js-=@*/
-var isNative = require(53),
-    getPrototypeOf = require(55),
-    isNullOrUndefined = require(38);
+/*@=-@nathanfaucett/has@0.0.2/src/index.js-=@*/
+var isNative = require(52),
+    getPrototypeOf = require(54),
+    isNullOrUndefined = require(37);
 
 
 var nativeHasOwnProp = Object.prototype.hasOwnProperty,
@@ -5299,9 +5320,9 @@ if (isNative(nativeHasOwnProp)) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_native@0.0.2/src/index.js-=@*/
-var isFunction = require(39),
-    isNullOrUndefined = require(38),
-    escapeRegExp = require(56);
+var isFunction = require(38),
+    isNullOrUndefined = require(37),
+    escapeRegExp = require(55);
 
 
 var reHostCtor = /^\[object .+?Constructor\]$/,
@@ -5347,7 +5368,7 @@ isHostObject = function isHostObject(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_object@0.0.1/src/index.js-=@*/
-var isNull = require(40);
+var isNull = require(39);
 
 
 module.exports = isObject;
@@ -5361,9 +5382,9 @@ function isObject(value) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/get_prototype_of@0.0.1/src/index.js-=@*/
-var isObject = require(54),
-    isNative = require(53),
-    isNullOrUndefined = require(38);
+var isObject = require(53),
+    isNative = require(52),
+    isNullOrUndefined = require(37);
 
 
 var nativeGetPrototypeOf = Object.getPrototypeOf,
@@ -5400,7 +5421,7 @@ if (isNative(nativeGetPrototypeOf)) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/escape_regexp@0.0.1/src/index.js-=@*/
-var toString = require(57);
+var toString = require(56);
 
 
 var reRegExpChars = /[.*+?\^${}()|\[\]\/\\]/g,
@@ -5422,8 +5443,8 @@ function escapeRegExp(string) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/to_string@0.0.1/src/index.js-=@*/
-var isString = require(35),
-    isNullOrUndefined = require(38);
+var isString = require(34),
+    isNullOrUndefined = require(37);
 
 
 module.exports = toString;
